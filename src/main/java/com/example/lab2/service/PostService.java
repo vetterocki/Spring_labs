@@ -36,7 +36,7 @@ public class PostService {
 
   public Post save(Post entity) {
     return topicService.findById(entity.getTopic().getId())
-        .map(topic -> userAccountService.findById(entity.getCreator().getId()).map(userAccount -> {
+        .map(topic -> userAccountService.findByEmail(entity.getCreator().getEmail()).map(userAccount -> {
           Post post = new Post(entity.getPostName(), userAccount, entity.getContent(), topic);
           return postRepository.save(post);
         })).orElseThrow(IllegalArgumentException::new)
