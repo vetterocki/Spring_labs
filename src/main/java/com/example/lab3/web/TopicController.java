@@ -1,7 +1,7 @@
-package com.example.lab2.web;
+package com.example.lab3.web;
 
-import com.example.lab2.model.Topic;
-import com.example.lab2.service.TopicService;
+import com.example.lab3.model.Topic;
+import com.example.lab3.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,8 +1,8 @@
-package com.example.lab2.web;
+package com.example.lab3.web;
 
 
-import com.example.lab2.model.Post;
-import com.example.lab2.service.PostService;
+import com.example.lab3.model.Post;
+import com.example.lab3.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package com.example.lab2.model;
+package com.example.lab3.model;
 
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -22,11 +22,15 @@ public class Post {
 
   private Topic topic;
 
-  public Post(String postName, UserAccount creator, String content, Topic topic) {
+  private PostType postType;
+
+  public Post(String postName, UserAccount creator, String content, Topic topic, PostType postType) {
     this.postName = postName;
     this.creator = creator;
     this.content = content;
     this.topic = topic;
     this.createdAt = LocalDateTime.now();
+    this.postType = postType;
   }
+
 }

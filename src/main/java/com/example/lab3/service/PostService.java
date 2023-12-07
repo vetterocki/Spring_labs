@@ -1,11 +1,11 @@
-package com.example.lab2.service;
+package com.example.lab3.service;
 
-import static com.example.lab2.service.PartialUpdateUtils.updateIfNotNull;
-import static com.example.lab2.service.PartialUpdateUtils.updateIfNotNullAndNotEmpty;
+import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNull;
+import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNullAndNotEmpty;
 
-import com.example.lab2.data.PostRepository;
-import com.example.lab2.model.Post;
-import com.example.lab2.model.Topic;
+import com.example.lab3.data.PostRepository;
+import com.example.lab3.model.Post;
+import com.example.lab3.model.Topic;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class PostService {
   public Post save(Post entity) {
     return topicService.findById(entity.getTopic().getId())
         .map(topic -> userAccountService.findByEmail(entity.getCreator().getEmail()).map(userAccount -> {
-          Post post = new Post(entity.getPostName(), userAccount, entity.getContent(), topic);
+          Post post = new Post(entity.getPostName(), userAccount, entity.getContent(), topic, entity.getPostType());
           return postRepository.save(post);
         })).orElseThrow(IllegalArgumentException::new)
         .orElseThrow(IllegalArgumentException::new);

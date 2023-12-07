@@ -1,4 +1,4 @@
-package com.example.lab2.data;
+package com.example.lab3.data;
 
 import java.util.ArrayList;
 import java.util.Collection;

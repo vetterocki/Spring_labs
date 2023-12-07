@@ -1,4 +1,4 @@
-package com.example.lab2.model;
+package com.example.lab3.model;
 
 
 import java.time.LocalDateTime;
@@ -21,6 +21,8 @@ public class Topic {
   private String description;
 
   private AdminAccount creator;
+
+  private boolean isArchived = false;
 
   private final List<Post> posts = new ArrayList<>();
 

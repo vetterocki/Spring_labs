@@ -1,7 +1,7 @@
-package com.example.lab2.web;
+package com.example.lab3.web;
 
-import com.example.lab2.model.UserAccount;
-import com.example.lab2.service.UserAccountService;
+import com.example.lab3.model.UserAccount;
+import com.example.lab3.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

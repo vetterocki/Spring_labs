@@ -1,13 +1,13 @@
-package com.example.lab2.service;
+package com.example.lab3.service;
 
-import static com.example.lab2.service.PartialUpdateUtils.updateIfNotNull;
-import static com.example.lab2.service.PartialUpdateUtils.updateIfNotNullAndNotEmpty;
+import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNull;
+import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNullAndNotEmpty;
 
-import com.example.lab2.data.PostRepository;
-import com.example.lab2.data.TopicRepository;
-import com.example.lab2.model.AdminAccount;
-import com.example.lab2.model.Post;
-import com.example.lab2.model.Topic;
+import com.example.lab3.data.PostRepository;
+import com.example.lab3.data.TopicRepository;
+import com.example.lab3.model.AdminAccount;
+import com.example.lab3.model.Post;
+import com.example.lab3.model.Topic;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

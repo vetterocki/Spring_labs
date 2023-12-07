@@ -1,4 +1,4 @@
-package com.example.lab2.service;
+package com.example.lab3.service;
 
 import java.util.function.Consumer;
 import lombok.experimental.UtilityClass;

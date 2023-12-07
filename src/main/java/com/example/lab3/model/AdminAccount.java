@@ -1,4 +1,4 @@
-package com.example.lab2.model;
+package com.example.lab3.model;
 
 import java.util.ArrayList;
 import java.util.List;

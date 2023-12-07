@@ -1,6 +1,6 @@
-package com.example.lab2.data;
+package com.example.lab3.data;
 
-import com.example.lab2.model.UserAccount;
+import com.example.lab3.model.UserAccount;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;

@@ -44,6 +44,7 @@
     <th style="text-align: center">Post ID</th>
     <th style="text-align: center">Post Name</th>
     <th style="text-align: center">Content</th>
+    <th style="text-align: center">Type</th>
     <th style="text-align: center">Created At</th>
     <th style="text-align: center">Topic id</th>
     <th style="text-align: center">Creator id</th>
@@ -56,6 +57,15 @@
     <td><h6 style="text-align: center"><span th:text="${post.id}"> Id </span></h6></td>
     <td><h6 style="text-align: center"><span th:text="${post.postName}"> Post Name </span></h6></td>
     <td><h6 style="text-align: center"><span th:text="${post.content}"> Content </span></h6></td>
+    <td>
+      <h6 th:switch="${post.getPostType()}">
+        <span th:case="${T(com.example.lab3.model.PostType).SOCIETY}" style="text-align: center; color: red">Society</span>
+        <span th:case="${T(com.example.lab3.model.PostType).TRAVELS}" style="text-align: center; color: orange">Travelling</span>
+        <span th:case="${T(com.example.lab3.model.PostType).ENGINEERING}" style="text-align: center; color: green">Engineering</span>
+        <span th:case="${T(com.example.lab3.model.PostType).BEAUTY}" style="text-align: center; color: purple">Beauty</span>
+        <span th:case="*" style="text-align: center; color: blue">Other</span>
+      </h6>
+    </td>
     <td><h6 style="text-align: center"><span th:text="${{post.createdAt}}"> Created At </span></h6></td>
     <td><h6 style="text-align: center"><span th:text="${post.topic.id}"> Topic Id </span></h6></td>
     <td><h6 style="text-align: center"><span th:text="${post.creator.id}"> Creator Id </span></h6></td>

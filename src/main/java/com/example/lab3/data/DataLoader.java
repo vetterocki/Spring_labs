@@ -1,9 +1,11 @@
-package com.example.lab2.data;
+package com.example.lab3.data;
 
-import com.example.lab2.model.AdminAccount;
-import com.example.lab2.model.Post;
-import com.example.lab2.model.Topic;
-import com.example.lab2.model.UserAccount;
+import static com.example.lab3.model.PostType.*;
+
+import com.example.lab3.model.AdminAccount;
+import com.example.lab3.model.Post;
+import com.example.lab3.model.Topic;
+import com.example.lab3.model.UserAccount;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -40,13 +42,14 @@ public class DataLoader {
       final String secondPost = "Second post";
 
       repositoryByType(PostRepository.class).saveAll(
-          List.of(new Post(firstPost, user, LOREM_IPSUM, firstTopic),
-              new Post(secondPost, user, LOREM_IPSUM, firstTopic),
-              new Post(firstPost, user, LOREM_IPSUM, secondTopic),
-              new Post(secondPost, user, LOREM_IPSUM, secondTopic),
-              new Post(firstPost, user, LOREM_IPSUM, thirdTopic),
-              new Post(secondPost, user, LOREM_IPSUM, thirdTopic)));
+          List.of(new Post(firstPost, user, LOREM_IPSUM, firstTopic, ENGINEERING),
+              new Post(secondPost, user, LOREM_IPSUM, firstTopic, SOCIETY),
+              new Post(firstPost, user, LOREM_IPSUM, secondTopic, TRAVELS),
+              new Post(secondPost, user, LOREM_IPSUM, secondTopic, ENGINEERING),
+              new Post(firstPost, user, LOREM_IPSUM, thirdTopic, BEAUTY),
+              new Post(secondPost, user, LOREM_IPSUM, thirdTopic, SOCIETY)));
     };
+
 
   }
 
