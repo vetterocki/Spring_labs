@@ -52,12 +52,12 @@
     </tr>
 
     <tr th:each="topic : ${topics}">
-        <td><h6 style="text-align: center"><span th:text="${topic.id}"> Id </span></h6></td>
-        <td><h6 style="text-align: center"><span th:text="${topic.topicName}"> TopicName </span></h6></td>
-        <td><h6 style="text-align: center"><span th:text="${topic.description}"> Description </span></h6></td>
-        <td><h6 style="text-align: center"><span th:text="${{topic.createdAt}}"> Created At </span></h6></td>
-        <td><h6 style="text-align: center"><span th:text="${topic.creator.id}"> Creator Id </span></h6></td>
-        <td><h6 style="text-align: center"><span th:text="${topic.isArchived()} ? 'ARCHIVED' : 'ACTIVATED'"> Status </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${topic.id}"> Id </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${topic.topicName}"> TopicName </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${topic.description}"> Description </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${{topic.createdAt}}"> Created At </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${topic.creator.id}"> Creator Id </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${topic.isArchived()} ? 'ARCHIVED' : 'ACTIVATED'"> Status </span></h6></td>
         <td style="text-align: center"><a th:href="@{/topics/posts/{id}(id=${topic.id})}" class="btn btn-success">Posts</a>
         <td style="text-align: center"><a th:href="@{/topics/update/{id}(id=${topic.id})}" class="btn btn-warning">Edit</a></td>
         </td>

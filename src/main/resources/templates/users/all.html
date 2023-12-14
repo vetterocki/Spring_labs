@@ -50,9 +50,9 @@
     </tr>
 
     <tr th:each="user : ${users}">
-        <td><h6 style="text-align: center"><span th:text="${user.id}"> Id </span></h6></td>
-        <td><h6 style="text-align: center"><span th:text="${user.email}"> Email </span></h6></td>
-        <td><h6 style="text-align: center"><span th:text="${user.role}"> Role </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${user.id}"> Id </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${user.email}"> Email </span></h6></td>
+        <td><h6 style="text-align: center"><span th:utext="${user.role}"> Role </span></h6></td>
         <td style="text-align: center"><a th:href="@{/users/posts/{id}(id=${user.id})}" class="btn btn-success">Posts</a>
         <td style="text-align: center"><a th:href="@{/users/topics/{id}(id=${user.id})}" class="btn btn-success">Topics</a>
         <td style="text-align: center"><a th:href="@{/users/update/{id}(id=${user.id})}" class="btn btn-warning">Edit</a></td>

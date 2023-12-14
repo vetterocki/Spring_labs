@@ -54,9 +54,9 @@
   </tr>
 
   <tr th:each="post : ${posts}">
-    <td><h6 style="text-align: center"><span th:text="${post.id}"> Id </span></h6></td>
-    <td><h6 style="text-align: center"><span th:text="${post.postName}"> Post Name </span></h6></td>
-    <td><h6 style="text-align: center"><span th:text="${post.content}"> Content </span></h6></td>
+    <td><h6 style="text-align: center"><span th:utext="${post.id}"> Id </span></h6></td>
+    <td><h6 style="text-align: center"><span th:utext="${post.postName}"> Post Name </span></h6></td>
+    <td><h6 style="text-align: center"><span th:utext="${post.content}"> Content </span></h6></td>
     <td>
       <h6 th:switch="${post.getPostType()}">
         <span th:case="${T(com.example.lab3.model.PostType).SOCIETY}" style="text-align: center; color: red">Society</span>
@@ -66,9 +66,9 @@
         <span th:case="*" style="text-align: center; color: blue">Other</span>
       </h6>
     </td>
-    <td><h6 style="text-align: center"><span th:text="${{post.createdAt}}"> Created At </span></h6></td>
-    <td><h6 style="text-align: center"><span th:text="${post.topic.id}"> Topic Id </span></h6></td>
-    <td><h6 style="text-align: center"><span th:text="${post.creator.id}"> Creator Id </span></h6></td>
+    <td><h6 style="text-align: center"><span th:utext="${{post.createdAt}}"> Created At </span></h6></td>
+    <td><h6 style="text-align: center"><span th:utext="${post.topic.id}"> Topic Id </span></h6></td>
+    <td><h6 style="text-align: center"><span th:utext="${post.creator.id}"> Creator Id </span></h6></td>
     <td style="text-align: center"><a th:href="@{/posts/update/{id}(id=${post.id})}" class="btn btn-warning">Edit</a></td>
     </td>
     <td style="text-align: center"><a
