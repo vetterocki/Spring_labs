@@ -1,11 +1,7 @@
 package com.example.lab3.service;
 
-import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNull;
-import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNullAndNotEmpty;
-
 import com.example.lab3.data.PostRepository;
 import com.example.lab3.model.Post;
-import com.example.lab3.model.Topic;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,25 +39,6 @@ public class PostService {
         .orElseThrow(IllegalArgumentException::new);
   }
 
-  public Post partialUpdate(Long id, Post updated) {
-    return findById(id)
-        .map(post -> userAccountService.findByEmail(post.getCreator().getEmail())
-            .map(userAccount -> topicService.findById(updated.getTopic().getId())
-                .map(topic -> {
-                  updateIfNotNullAndNotEmpty(updated.getPostName(), post::setPostName);
-                  updateIfNotNull(updated.getCreator(), post::setCreator);
-                  updateIfNotNull(updated.getTopic(), post::setTopic);
-                  updateIfNotNullAndNotEmpty(updated.getContent(), post::setContent);
-                  return postRepository.save(post);
-                })
-                .orElseThrow(IllegalArgumentException::new))
-            .orElseThrow(IllegalArgumentException::new))
-        .orElseThrow(IllegalArgumentException::new);
-  }
 
-
-  public List<Post> findAllByTopic(Topic topic) {
-    return postRepository.findAllByTopic(topic);
-  }
 }
 

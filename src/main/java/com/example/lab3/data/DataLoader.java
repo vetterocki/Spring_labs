@@ -1,6 +1,9 @@
 package com.example.lab3.data;
 
-import static com.example.lab3.model.PostType.*;
+import static com.example.lab3.model.PostType.BEAUTY;
+import static com.example.lab3.model.PostType.ENGINEERING;
+import static com.example.lab3.model.PostType.SOCIETY;
+import static com.example.lab3.model.PostType.TRAVELS;
 
 import com.example.lab3.model.AdminAccount;
 import com.example.lab3.model.Post;

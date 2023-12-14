@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @NoArgsConstructor
 @Data
@@ -15,7 +14,6 @@ public class Topic {
 
   private String topicName;
 
-  @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime createdAt;
 
   private String description;

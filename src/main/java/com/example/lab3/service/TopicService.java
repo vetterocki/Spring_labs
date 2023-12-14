@@ -1,15 +1,13 @@
 package com.example.lab3.service;
 
-import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNull;
-import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNullAndNotEmpty;
-
-import com.example.lab3.data.PostRepository;
 import com.example.lab3.data.TopicRepository;
 import com.example.lab3.model.AdminAccount;
-import com.example.lab3.model.Post;
 import com.example.lab3.model.Topic;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +15,12 @@ import org.springframework.stereotype.Service;
 public class TopicService {
   private TopicRepository topicRepository;
   private UserAccountService userAccountService;
-  private PostRepository postRepository;
 
   @Autowired
   public void setUserAccountService(UserAccountService userAccountService) {
     this.userAccountService = userAccountService;
   }
 
-  @Autowired
-  public void setPostRepository(PostRepository postRepository) {
-    this.postRepository = postRepository;
-  }
 
   @Autowired
   public void setTopicRepository(TopicRepository topicRepository) {
@@ -38,14 +31,26 @@ public class TopicService {
     return topicRepository.findAll();
   }
 
+  public List<Topic> findAll(int pageSize, int pageNumber) {
+    var total = topicRepository.findAll();
+    int minIndex = pageNumber * pageSize - pageSize;
+    int maxIndex = minIndex + pageSize;
+    return IntStream.range(0, total.size())
+        .filter(i -> i >= minIndex && i <= maxIndex)
+        .mapToObj(total::get)
+        .collect(Collectors.toList());
+  }
+
+  public List<Topic> filterByNameLength(int maxLength, List<Topic> topicsToFilter) {
+    return topicsToFilter.stream()
+        .filter(topic -> topic.getTopicName().length() <= maxLength)
+        .toList();
+  }
+
   public Optional<Topic> findById(Long id) {
     return topicRepository.findById(id);
   }
 
-  public List<Post> findAllPostsByTopic(Long id) {
-    return findById(id).map(topic -> postRepository.findAllByTopic(topic))
-        .orElseThrow(IllegalArgumentException::new);
-  }
 
   public Topic save(Topic topic) {
     return userAccountService.findByEmail(topic.getCreator().getEmail())
@@ -56,20 +61,9 @@ public class TopicService {
         }).orElseThrow(IllegalArgumentException::new);
   }
 
-  public Topic partialUpdate(Long id, Topic updated) {
-    return findById(id).map(topic -> userAccountService.findByEmail(topic.getCreator().getEmail())
-        .filter(userAccountService::isUserAdmin).map(userAccount -> {
-              updateIfNotNull(updated.getCreator(), topic::setCreator);
-              updateIfNotNullAndNotEmpty(updated.getTopicName(), topic::setTopicName);
-              updateIfNotNullAndNotEmpty(updated.getDescription(), topic::setDescription);
-              return topicRepository.save(topic);
-        }).orElseThrow(IllegalArgumentException::new))
-        .orElseThrow(IllegalArgumentException::new);
-
-  }
-
 
   public void deleteById(Long id) {
     topicRepository.deleteById(id);
   }
+
 }

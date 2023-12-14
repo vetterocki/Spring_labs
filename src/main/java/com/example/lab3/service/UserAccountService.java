@@ -1,7 +1,5 @@
 package com.example.lab3.service;
 
-import static com.example.lab3.service.PartialUpdateUtils.updateIfNotNullAndNotEmpty;
-
 import com.example.lab3.data.PostRepository;
 import com.example.lab3.data.TopicRepository;
 import com.example.lab3.data.UserAccountRepository;
@@ -49,12 +47,10 @@ public class UserAccountService {
     }
   }
 
-  public UserAccount partialUpdate(Long id, UserAccount updated) {
+  public UserAccount update(Long id, UserAccount updated) {
     return findById(id)
         .map(userAccount -> {
           if (checkIfCorrectUpdate(updated)) {
-            updateIfNotNullAndNotEmpty(updated.getEmail(), userAccount::setEmail);
-            updateIfNotNullAndNotEmpty(updated.getPassword(), userAccount::setPassword);
             return userAccountRepository.save(userAccount);
           } else {
             throw new IllegalArgumentException(

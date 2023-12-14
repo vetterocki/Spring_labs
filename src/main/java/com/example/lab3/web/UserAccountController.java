@@ -1,73 +1,89 @@
 package com.example.lab3.web;
 
+import com.example.lab3.model.AdminAccount;
 import com.example.lab3.model.UserAccount;
 import com.example.lab3.service.UserAccountService;
+import com.example.lab3.web.dto.PostViewDto;
+import com.example.lab3.web.dto.TopicViewDto;
+import com.example.lab3.web.dto.user.UserModifyDto;
+import com.example.lab3.web.dto.user.UserAccountViewDto;
+import com.example.lab3.web.dto.user.UserViewDto;
+import com.example.lab3.web.mapper.PostMapper;
+import com.example.lab3.web.mapper.TopicMapper;
+import com.example.lab3.web.mapper.UserAccountMapper;
+import jakarta.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@Controller
+@RestController
 public class UserAccountController {
   private final UserAccountService userAccountService;
-  private static final String USER_ATTRIBUTE = "user";
+  private final UserAccountMapper userAccountMapper;
+  private final PostMapper postMapper;
+  private final TopicMapper topicMapper;
 
   @GetMapping("/all")
-  public String findAll(Model model) {
-    model.addAttribute("users", userAccountService.findAll());
-    return "/users/all";
+  public ResponseEntity<List<UserViewDto>> findAll() {
+    return userAccountService.findAll().stream()
+        .map(userAccountMapper::toDto)
+        .collect(Collectors.collectingAndThen(Collectors.toList(), ResponseEntity::ok));
   }
 
-  @GetMapping("/creation-form")
-  public String findCreationForm(UserAccount userAccount, Model model) {
-    model.addAttribute(USER_ATTRIBUTE, userAccount);
-    return "/users/creation";
+  @GetMapping("/{id}")
+  public ResponseEntity<UserViewDto> findCreationForm(@PathVariable Long id) {
+    return ResponseEntity.of(userAccountService.findById(id).map(userAccountMapper::toDto));
   }
 
-  @GetMapping("/posts/{id}")
-  public String findAllPostsByUser(Model model, @PathVariable Long id) {
-    userAccountService.findById(id).ifPresent(found -> {
-      model.addAttribute("posts", userAccountService.findAllPostsByUser(found));
-      model.addAttribute(USER_ATTRIBUTE, found);
-    });
-    return "/posts/all";
+  @GetMapping("/{id}/posts")
+  public ResponseEntity<List<PostViewDto>> findAllPostsByUser(@PathVariable Long id) {
+    return ResponseEntity.of(userAccountService.findById(id).map(
+        userAccount -> userAccount.getPosts().stream()
+            .map(postMapper::toDto)
+            .toList()));
   }
 
-  @GetMapping("/topics/{id}")
-  public String findAllTopicsByUser(Model model, @PathVariable Long id) {
-    userAccountService.findById(id).ifPresent(found -> {
-      model.addAttribute("topics", userAccountService.findAllTopicsByUser(found));
-      model.addAttribute(USER_ATTRIBUTE, found);
-    });
-    return "/topics/all";
+  @GetMapping("/{id}/topics")
+  public ResponseEntity<List<TopicViewDto>> findAllTopicsByUser(@PathVariable Long id) {
+    return ResponseEntity.of(userAccountService.findById(id)
+        .filter(userAccountService::isUserAdmin)
+        .map(userAccount -> (AdminAccount) userAccount)
+        .map(adminAccount -> adminAccount.getTopics().stream()
+            .map(topicMapper::toDto)
+            .toList()));
+
   }
 
-  @GetMapping("/update/{id}")
-  public String findUpdateForm(@PathVariable Long id, Model model) {
-    userAccountService.findById(id).ifPresent(found -> model.addAttribute(USER_ATTRIBUTE, found));
-    return "/users/changing";
+  @PatchMapping("/{id}")
+  public ResponseEntity<UserViewDto> findUpdateForm(@PathVariable Long id,
+                                                           @Valid @RequestBody
+                                                           UserModifyDto modifyDto) {
+    UserAccount modified = userAccountMapper.toEntity(modifyDto);
+    UserAccount updated = userAccountService.update(id, modified);
+    return ResponseEntity.ok(userAccountMapper.toDto(updated));
   }
 
-  @PostMapping("/update/{id}")
-  public String update(UserAccount userAccount, Model model, @PathVariable Long id) {
-    userAccountService.partialUpdate(id, userAccount);
-    return findAll(model);
+  @PostMapping
+  public ResponseEntity<UserViewDto> create(@Valid @RequestBody UserModifyDto userAccount) {
+    UserAccount created = userAccountService.register(userAccountMapper.toEntity(userAccount));
+    return ResponseEntity.status(HttpStatus.CREATED).body(userAccountMapper.toDto(created));
   }
 
-  @PostMapping("/create")
-  public String create(UserAccount userAccount, Model model) {
-    userAccountService.register(userAccount);
-    return findAll(model);
-  }
-
-  @GetMapping("/delete/{id}")
-  public String delete(Model model, @PathVariable Long id) {
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
     userAccountService.deleteById(id);
-    return findAll(model);
+    return ResponseEntity.noContent().build();
   }
 }

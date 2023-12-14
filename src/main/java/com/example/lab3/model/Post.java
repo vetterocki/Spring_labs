@@ -3,7 +3,6 @@ package com.example.lab3.model;
 import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 
 @NoArgsConstructor
@@ -13,7 +12,6 @@ public class Post {
 
   private String postName;
 
-  @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime createdAt;
 
   private UserAccount creator;
