@@ -8,7 +8,8 @@ import lombok.Data;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY,
     property = "jsonType", visible = true)
 @JsonSubTypes(value = {
-    @JsonSubTypes.Type(name = "admin", value = AdminAccountModifyDto.class)
+    @JsonSubTypes.Type(name = "admin", value = AdminAccountModifyDto.class),
+    @JsonSubTypes.Type(name = "user", value = UserAccountModifyDto.class)
 })
 @Data
 public abstract class UserModifyDto {

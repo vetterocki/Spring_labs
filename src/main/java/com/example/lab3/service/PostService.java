@@ -1,6 +1,8 @@
 package com.example.lab3.service;
 
 import com.example.lab3.data.PostRepository;
+import com.example.lab3.exception.TopicNotFoundException;
+import com.example.lab3.exception.UserNotFoundException;
 import com.example.lab3.model.Post;
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +37,8 @@ public class PostService {
         .map(topic -> userAccountService.findByEmail(entity.getCreator().getEmail()).map(userAccount -> {
           Post post = new Post(entity.getPostName(), userAccount, entity.getContent(), topic, entity.getPostType());
           return postRepository.save(post);
-        })).orElseThrow(IllegalArgumentException::new)
-        .orElseThrow(IllegalArgumentException::new);
+        })).orElseThrow(() -> new UserNotFoundException(entity.getCreator().getEmail()))
+        .orElseThrow(() -> new TopicNotFoundException(entity.getTopic().getId()));
   }
 
 

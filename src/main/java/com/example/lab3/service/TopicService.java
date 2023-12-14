@@ -1,9 +1,9 @@
 package com.example.lab3.service;
 
 import com.example.lab3.data.TopicRepository;
+import com.example.lab3.exception.AccessForbiddenException;
 import com.example.lab3.model.AdminAccount;
 import com.example.lab3.model.Topic;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,11 +54,14 @@ public class TopicService {
 
   public Topic save(Topic topic) {
     return userAccountService.findByEmail(topic.getCreator().getEmail())
-        .filter(userAccountService::isUserAdmin).map(userAccount -> {
-          Topic newTopic =
-              new Topic(topic.getTopicName(), topic.getDescription(), (AdminAccount) userAccount);
+        .filter(userAccountService::isUserAdmin)
+        .map(userAccount -> {
+          Topic newTopic = new Topic(topic.getTopicName(),
+              topic.getDescription(),
+              (AdminAccount) userAccount
+          );
           return topicRepository.save(newTopic);
-        }).orElseThrow(IllegalArgumentException::new);
+        }).orElseThrow(() -> new AccessForbiddenException("User is not admin to create topic!"));
   }
 
 

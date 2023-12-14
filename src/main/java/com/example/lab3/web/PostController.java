@@ -3,9 +3,17 @@ package com.example.lab3.web;
 
 import com.example.lab3.model.Post;
 import com.example.lab3.service.PostService;
+import com.example.lab3.web.dto.ExceptionResponse;
 import com.example.lab3.web.dto.PostModifyDto;
 import com.example.lab3.web.dto.PostViewDto;
+import com.example.lab3.web.dto.TopicViewDto;
+import com.example.lab3.web.dto.user.AdminAccountViewDto;
+import com.example.lab3.web.dto.user.UserAccountViewDto;
 import com.example.lab3.web.mapper.PostMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +37,12 @@ public class PostController {
   private final PostMapper postMapper;
 
   @GetMapping("/all")
+  @Operation(summary = "Get all posts", responses = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(schema = @Schema(implementation = PostViewDto.class))
+          })
+  })
   public ResponseEntity<List<PostViewDto>> findAll() {
     return postService.findAll().stream()
         .map(postMapper::toDto)
@@ -36,24 +50,57 @@ public class PostController {
   }
 
   @GetMapping("/{id}")
+  @Operation(summary = "Get post by id", responses = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(schema = @Schema(implementation = PostViewDto.class))
+          }),
+      @ApiResponse(responseCode = "404", description = "Post not found",
+          content = @Content)
+  })
   public ResponseEntity<PostViewDto> findById(@PathVariable Long id) {
     return ResponseEntity.of(postService.findById(id).map(postMapper::toDto));
   }
+
   @PatchMapping("/{id}")
-  public ResponseEntity<PostViewDto> update(@RequestBody PostModifyDto post, @PathVariable Long id) {
+  @Operation(summary = "Update post", responses = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(schema = @Schema(implementation = PostViewDto.class))
+          }),
+      @ApiResponse(responseCode = "404", description = "Post not found by id")
+  })
+  public ResponseEntity<PostViewDto> update(@Valid @RequestBody PostModifyDto post, @PathVariable Long id) {
     return ResponseEntity.of(postService.findById(id)
         .map(found -> postMapper.partial(post, found))
         .map(postService::save)
         .map(postMapper::toDto));
   }
+
   @PostMapping
+  @Operation(
+      summary = "Create post",
+      responses = {
+          @ApiResponse(responseCode = "201",
+              content = {
+                  @Content(schema = @Schema(implementation = PostViewDto.class))
+              }),
+          @ApiResponse(responseCode = "404",
+              description = "Either user or topic is not not found by id",
+              content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
+      })
   public ResponseEntity<PostViewDto> create(@Valid @RequestBody PostModifyDto postModifyDto) {
     Post post = postService.save(postMapper.toEntity(postModifyDto));
     return ResponseEntity.status(HttpStatus.CREATED).body(postMapper.toDto(post));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteTopic(@PathVariable Long id) {
+  @Operation(summary = "Delete post by id", responses = {
+      @ApiResponse(responseCode = "204"),
+      @ApiResponse(responseCode = "404", description = "Post not found",
+          content = @Content)
+  })
+  public ResponseEntity<Void> deletePost(@PathVariable Long id) {
     postService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

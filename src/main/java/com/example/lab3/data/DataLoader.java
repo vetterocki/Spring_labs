@@ -39,18 +39,22 @@ public class DataLoader {
       var secondTopic = new Topic("Second topic", "Lorem Ipsum second Paragraph", admin);
       var thirdTopic = new Topic("Third topic", "Lorem Ipsum third Paragraph", admin);
 
-      repositoryByType(TopicRepository.class).saveAll(List.of(firstTopic, secondTopic, thirdTopic));
+      var topics = repositoryByType(TopicRepository.class).saveAll(List.of(firstTopic, secondTopic, thirdTopic));
 
       final String firstPost = "First post";
       final String secondPost = "Second post";
 
-      repositoryByType(PostRepository.class).saveAll(
+      var posts = repositoryByType(PostRepository.class).saveAll(
           List.of(new Post(firstPost, user, LOREM_IPSUM, firstTopic, ENGINEERING),
               new Post(secondPost, user, LOREM_IPSUM, firstTopic, SOCIETY),
               new Post(firstPost, user, LOREM_IPSUM, secondTopic, TRAVELS),
               new Post(secondPost, user, LOREM_IPSUM, secondTopic, ENGINEERING),
               new Post(firstPost, user, LOREM_IPSUM, thirdTopic, BEAUTY),
               new Post(secondPost, user, LOREM_IPSUM, thirdTopic, SOCIETY)));
+
+      user.addAllPosts(posts);
+      admin.addAllTopics(topics);
+      repositoryByType(UserAccountRepository.class).saveAll(List.of(user, admin));
     };
 
 

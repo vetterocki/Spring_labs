@@ -9,7 +9,5 @@ public abstract class UserViewDto {
 
   protected String email;
 
-  protected String password;
-
   protected Role role;
 }

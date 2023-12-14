@@ -3,6 +3,7 @@ package com.example.lab3.service;
 import com.example.lab3.data.PostRepository;
 import com.example.lab3.data.TopicRepository;
 import com.example.lab3.data.UserAccountRepository;
+import com.example.lab3.exception.UserAlreadyExistsException;
 import com.example.lab3.model.Post;
 import com.example.lab3.model.Role;
 import com.example.lab3.model.Topic;
@@ -42,22 +43,19 @@ public class UserAccountService {
     if (!userAccountRepository.existsByEmail(entity.getEmail())) {
       return userAccountRepository.save(entity);
     } else {
-      throw new IllegalArgumentException(
+      throw new UserAlreadyExistsException(
           String.format("User with email %s already exists", entity.getEmail()));
     }
   }
 
   public UserAccount update(Long id, UserAccount updated) {
-    return findById(id)
-        .map(userAccount -> {
-          if (checkIfCorrectUpdate(updated)) {
-            return userAccountRepository.save(userAccount);
-          } else {
-            throw new IllegalArgumentException(
-                String.format("User with email %s already exists", updated.getEmail()));
-          }
-        })
-        .orElseThrow(IllegalArgumentException::new);
+    if (checkIfCorrectUpdate(updated)) {
+      updated.setId(id);
+      return userAccountRepository.save(updated);
+    } else {
+      throw new UserAlreadyExistsException(
+          String.format("User with email %s already exists", updated.getEmail()));
+    }
   }
 
   private boolean checkIfCorrectUpdate(UserAccount updated) {
@@ -76,14 +74,6 @@ public class UserAccountService {
 
   public boolean isUserAdmin(UserAccount userAccount) {
     return userAccount.getRole().equals(Role.ADMIN);
-  }
-
-  public List<Post> findAllPostsByUser(UserAccount userAccount) {
-    return postRepository.findAllByUserAccount(userAccount);
-  }
-
-  public List<Topic> findAllTopicsByUser(UserAccount userAccount) {
-    return topicRepository.findAllByUserAccount(userAccount);
   }
 
 

@@ -1,6 +1,7 @@
 package com.example.lab3.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,16 @@ public class AdminAccount extends UserAccount {
     super(email, password);
     this.role = Role.ADMIN;
   }
+
+  public void addTopic(Topic topic) {
+    topic.setCreator(this);
+    this.topics.add(topic);
+  }
+
+  public void addAllTopics(Collection<Topic> topics) {
+    topics.forEach(this::addTopic);
+  }
+
 
 
 }
