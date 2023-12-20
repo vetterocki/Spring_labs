@@ -49,8 +49,8 @@ public class UserAccountService {
   }
 
   public UserAccount update(Long id, UserAccount updated) {
+    updated.setId(id);
     if (checkIfCorrectUpdate(updated)) {
-      updated.setId(id);
       return userAccountRepository.save(updated);
     } else {
       throw new UserAlreadyExistsException(

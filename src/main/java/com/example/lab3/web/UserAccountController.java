@@ -86,7 +86,7 @@ public class UserAccountController {
               content = {
                   @Content(schema = @Schema(implementation = PostViewDto.class))
               }),
-          @ApiResponse(responseCode = "404", description = "User does not have any posts",
+          @ApiResponse(responseCode = "404", description = "User not found",
               content = @Content)
       })
   public ResponseEntity<List<PostViewDto>> findAllPostsByUser(@PathVariable Long id) {
@@ -104,7 +104,7 @@ public class UserAccountController {
               content = {
                   @Content(schema = @Schema(implementation = TopicViewDto.class))
               }),
-          @ApiResponse(responseCode = "404", description = "User does not have any topics",
+          @ApiResponse(responseCode = "404", description = "User not found",
               content = @Content)
       })
   public ResponseEntity<List<TopicViewDto>> findAllTopicsByUser(@PathVariable Long id) {
@@ -133,8 +133,7 @@ public class UserAccountController {
           content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
   })
   public ResponseEntity<UserViewDto> findUpdateForm(@PathVariable Long id,
-                                                           @Valid @RequestBody
-                                                           UserModifyDto modifyDto) {
+                                                    @RequestBody UserModifyDto modifyDto) {
     return ResponseEntity.of(userAccountService.findById(id)
         .map(userAccount -> userAccountService.update(id, userAccountMapper.toEntity(modifyDto)))
         .map(userAccountMapper::toDto));
@@ -156,7 +155,7 @@ public class UserAccountController {
               description = "Another user with such email already exists",
               content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
       })
-  public ResponseEntity<UserViewDto> create(@Valid @RequestBody UserModifyDto userAccount) {
+  public ResponseEntity<UserViewDto> create(@RequestBody UserModifyDto userAccount) {
     UserAccount created = userAccountService.register(userAccountMapper.toEntity(userAccount));
     return ResponseEntity.status(HttpStatus.CREATED).body(userAccountMapper.toDto(created));
   }
