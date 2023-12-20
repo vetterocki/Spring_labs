@@ -23,11 +23,11 @@ public class UserAccountService {
   private final PostRepository postRepository;
 
   public List<Topic> findAllTopics(UserAccount userAccount) {
-    return topicRepository.findAllByUserAccount(userAccount);
+    return topicRepository.findAllByCreator(userAccount);
   }
 
   public List<Post> findAllByPosts(UserAccount userAccount) {
-    return postRepository.findAllByUserAccount(userAccount);
+    return postRepository.findAllByCreator(userAccount);
   }
 
   public List<UserAccount> findAll() {

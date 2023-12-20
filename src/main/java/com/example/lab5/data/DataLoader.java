@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class DataLoader {
       cursus a. Class aptent taciti.\s
       """;
 
-  private final List<JdbcRepository<?, ?>> jdbcRepositories;
+  private final List<JpaRepository<?, ?>> jdbcRepositories;
 
   @Bean
   @Scope("prototype")
@@ -65,7 +66,7 @@ public class DataLoader {
 
   }
 
-  private <T extends JdbcRepository<?, ?>> T repositoryByType(Class<T> repositoryType) {
+  private <T extends JpaRepository<?, ?>> T repositoryByType(Class<T> repositoryType) {
     return jdbcRepositories.stream()
         .filter(repositoryType::isInstance)
         .map(repositoryType::cast)

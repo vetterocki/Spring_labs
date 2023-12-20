@@ -3,6 +3,7 @@ package com.example.lab5.web;
 import com.example.lab5.model.Topic;
 import com.example.lab5.service.TopicService;
 import com.example.lab5.web.dto.ExceptionResponse;
+import com.example.lab5.web.dto.LightenPage;
 import com.example.lab5.web.dto.PostViewDto;
 import com.example.lab5.web.dto.TopicModifyDto;
 import com.example.lab5.web.dto.TopicViewDto;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,11 +47,13 @@ public class TopicController {
               @Content(schema = @Schema(implementation = TopicViewDto.class))
           })
   })
-  public ResponseEntity<List<TopicViewDto>> findAll(@RequestParam int pageSize,
-                                                    @RequestParam int pageNumber) {
-    return topicService.findAll(pageSize, pageNumber).stream()
-        .map(topicMapper::toDto)
-        .collect(Collectors.collectingAndThen(Collectors.toList(), ResponseEntity::ok));
+  public ResponseEntity<LightenPage<TopicViewDto>> findAll(@RequestParam int pageSize,
+                                                           @RequestParam int pageNumber) {
+    return Optional.of(topicService.findAll(pageSize, pageNumber - 1))
+        .map(page -> page.map(topicMapper::toDto))
+        .map(LightenPage::of)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
   }
 
   @GetMapping("/all/filtered")

@@ -19,10 +19,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         @Server(url = "http://localhost:8080", description = "test server")
     }
 )
-public class Lab5Application {
+public class Lab6Application {
 
   public static void main(String[] args) {
-    SpringApplication.run(Lab5Application.class, args);
+    SpringApplication.run(Lab6Application.class, args);
   }
 
 }

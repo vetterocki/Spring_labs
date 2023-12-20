@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,14 +47,9 @@ public class TopicService {
     return topicRepository.findAll();
   }
 
-  public List<Topic> findAll(int pageSize, int pageNumber) {
-    var total = topicRepository.findAll();
-    int minIndex = pageNumber * pageSize - pageSize;
-    int maxIndex = minIndex + pageSize;
-    return IntStream.range(0, total.size())
-        .filter(i -> i >= minIndex && i <= maxIndex)
-        .mapToObj(total::get)
-        .collect(Collectors.toList());
+  public Page<Topic> findAll(int pageSize, int pageNumber) {
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    return topicRepository.findAll(pageable);
   }
 
   public List<Topic> filterByNameLength(int maxLength, List<Topic> topicsToFilter) {
@@ -84,6 +82,6 @@ public class TopicService {
   }
 
   public List<Topic> findAllByUserAccount(UserAccount userAccount) {
-    return topicRepository.findAllByUserAccount(userAccount);
+    return topicRepository.findAllByCreator(userAccount);
   }
 }
